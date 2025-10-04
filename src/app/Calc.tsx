@@ -44,8 +44,9 @@ export default function Calc() {
     <div className={styles.calc}>
       <div className={styles.fields}>
         <div className={styles.field}>
-          <p>Начальная сумма</p>
+          <p>Initial amount</p>
           <div className={styles.inputBlock}>
+            ${' '}
             <input
               type='text'
               value={amount.toLocaleString('ru-RU', { maximumFractionDigits: 0 })}
@@ -54,11 +55,10 @@ export default function Calc() {
                 setAmount(Number(cleanValue))
               }}
             />
-            {' '}₽
           </div>
         </div>
         <div className={styles.field}>
-          <p>Дата начала</p>
+          <p>Start date</p>
           <div className={styles.dateBlock}>
             <input
               type='date'
@@ -69,19 +69,19 @@ export default function Calc() {
         </div>
 
         <div className={styles.field}>
-          <p>Срок</p>
+          <p>Term</p>
           <div className={styles.inputBlock}>
             <input
               type='number'
               value={months}
               onChange={(e) => setMonths(Number(e.target.value))}
             />
-            {' '}мес
+            {' '}months
           </div>
         </div>
 
         <div className={styles.field}>
-          <p>Ставка вклада (годовая)</p>
+          <p>Annual interest rate on deposit</p>
           <div className={styles.inputBlock}>
             <input
               type='number'
@@ -94,7 +94,7 @@ export default function Calc() {
         </div>
 
         <div className={styles.field}>
-          <p>Ставка фонда (годовая)</p>
+          <p>Annual interest rate on the fund</p>
           <div className={styles.inputBlock}>
             <input
               type='number'
@@ -107,9 +107,9 @@ export default function Calc() {
         </div>
 
         <div className={styles.field}>
-          <p>Безналоговый лимит вклада в год</p>
+          <p>Tax-free deposit limit per year</p>
           <div className={styles.inputBlock}>
-            <input
+            $ <input
               type='text'
               value={taxFreeAmount.toLocaleString('ru-RU', { maximumFractionDigits: 0 })}
               onChange={(e) => {
@@ -118,14 +118,13 @@ export default function Calc() {
               }
               }
             />
-            {' '}₽
           </div>
         </div>
 
         <div className={styles.field}>
-          <p>Заработано на вкладе в этом году</p>
+          <p>Earned on deposit this year</p>
           <div className={styles.inputBlock}>
-            <input
+            $ <input
               type='text'
               value={earnedThisYear.toLocaleString('ru-RU', { maximumFractionDigits: 0 })}
               onChange={(e) => {
@@ -133,12 +132,11 @@ export default function Calc() {
                 setEarnedThisYear(Number(cleanValue))
               }}
             />
-            {' '}₽
           </div>
         </div>
 
         <div className={styles.field}>
-          <p>Налог на прибыль</p>
+          <p>Income tax</p>
           <div className={styles.inputBlock}>
             <input
               type='number'
@@ -153,22 +151,21 @@ export default function Calc() {
 
       <div className={styles.results}>
         <p>
-          Вклад: <b>{depositProfit.toLocaleString('ru-RU', {
+          Deposit: <b>$ {depositProfit.toLocaleString('ru-RU', {
             maximumFractionDigits: 0
-          })} ₽</b>
+          })}</b>
         </p>
         <p>
-          Фонд: <b>{fundProfit.toLocaleString('ru-RU', {
+          Fund: <b>$ {fundProfit.toLocaleString('ru-RU', {
             maximumFractionDigits: 0
-          })} ₽</b>
+          })}</b>
         </p>
         <p>
-          Разница:{' '}
-          <b>
-            {Math.abs((fundProfit - depositProfit)).toLocaleString('ru-RU', {
+          Difference:{' '}
+          <b>$ {Math.abs((fundProfit - depositProfit)).toLocaleString('ru-RU', {
               maximumFractionDigits: 0
-            })} ₽{' '}
-            {fundProfit - depositProfit >= 0.5 ? '(фонд выгоднее)' : depositProfit - fundProfit >= 0.5 ? '(вклад выгоднее)' : '(одинаково)'}
+            })}{' '}
+            {fundProfit - depositProfit >= 0.5 ? '(the fund is more profitable)' : depositProfit - fundProfit >= 0.5 ? '(deposit is more profitable)' : '(same)'}
           </b>
         </p>
       </div>

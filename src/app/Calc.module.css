@@ -1,0 +1,18 @@
+.calc{
+  display: flex;
+  flex-direction: column;
+}
+.fields{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.field{
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  white-space: nowrap;
+}
+.field input{
+  width: max-content;
+}

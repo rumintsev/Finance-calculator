@@ -1,18 +1,54 @@
-.calc{
+.calc {
   display: flex;
   flex-direction: column;
 }
-.fields{
-  display: flex;
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   flex-direction: column;
   gap: 10px;
-}
-.field{
-  position: relative;
   width: 100%;
-  max-width: 300px;
-  white-space: nowrap;
+  max-width: 900px;
+  box-sizing: border-box;
+  margin: 50px auto 0;
 }
-.field input{
-  width: max-content;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ebebeb;
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.field p {
+  margin: 0 0 15px;
+}
+
+.inputBlock {
+  display: flex;
+  gap: 6px;
+}
+
+.inputBlock input {
+  width: 100%;
+}
+
+.dateBlock {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.results {
+  border: 1px solid #ebebeb;
+  border-radius: 15px;
+  padding: 25px;
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  margin: 10px auto 0;
+}
+.results b{
+  font-size: 20px;
 }

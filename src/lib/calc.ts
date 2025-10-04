@@ -5,6 +5,7 @@ type Deposit = {
   taxRate: number;
   taxFreeAmount: number;
   startDate: Date;
+  earnedThisYear: number;
 }
 
 type Fund = {
@@ -15,10 +16,10 @@ type Fund = {
 }
 
 export function calcDepositProfit(options: Deposit): number {
-  const { amount, rate, months, taxRate, taxFreeAmount, startDate } = options;
+  const { amount, rate, months, taxRate, taxFreeAmount, startDate, earnedThisYear } = options;
 
   let total = amount;
-  let profitGeted = 0;
+  let profitGeted = earnedThisYear;
   let currentDate = new Date(startDate);
 
   for (let i = 0; i < months; i++) {
@@ -28,7 +29,7 @@ export function calcDepositProfit(options: Deposit): number {
       profitGeted = 0;
     }
     if (profitGeted > taxFreeAmount) {
-      total += profit * (taxRate / 100);
+      total += profit * (1 - taxRate / 100);
     } else {
       profitGeted += profit;
       if (profitGeted > taxFreeAmount) {

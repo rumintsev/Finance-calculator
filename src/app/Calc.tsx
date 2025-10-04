@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import styles from "./Calc.module.css";
-import { useState } from "react";
-import { calcDepositProfit, calcFundProfit } from "../lib/calc";
+import styles from './Calc.module.css';
+import { useState } from 'react';
+import { calcDepositProfit, calcFundProfit } from '../lib/calc';
 
 export default function Calc() {
   const [amount, setAmount] = useState(100_000);
   const [depositRate, setDepositRate] = useState(15.5);
   const [fundRate, setFundRate] = useState(17);
   const [months, setMonths] = useState(1);
-  const [taxFreeAmount, settaxFreeAmount] = useState(210_000);
+  const [taxFreeAmount, setTaxFreeAmount] = useState(210_000);
+  const [earnedThisYear, setEarnedThisYear] = useState(0);
   const [fundTaxRate, setFundTaxRate] = useState(13);
   const [startDate, setStartDate] = useState<Date>(new Date());
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +27,7 @@ export default function Calc() {
     taxRate: fundTaxRate,
     taxFreeAmount: taxFreeAmount,
     startDate: startDate,
+    earnedThisYear: earnedThisYear,
   };
 
   const fund = {
@@ -42,91 +44,134 @@ export default function Calc() {
     <div className={styles.calc}>
       <div className={styles.fields}>
         <div className={styles.field}>
-          Начальная сумма:{" "}
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-          />
-          ₽
+          <p>Начальная сумма</p>
+          <div className={styles.inputBlock}>
+            <input
+              type='text'
+              value={amount.toLocaleString('ru-RU', { maximumFractionDigits: 0 })}
+              onChange={(e) => {
+                const cleanValue = e.target.value.replace(/\s/g, '');
+                setAmount(Number(cleanValue))
+              }}
+            />
+            {' '}₽
+          </div>
         </div>
         <div className={styles.field}>
-          <input
-            type="date"
-            value={startDate.toISOString().slice(0, 10)}
-            onChange={handleDateChange}
-          />
-        </div>
-
-        <div className={styles.field}>
-          Ставка вклада (годовая):{" "}
-          <input
-            type="number"
-            step="0.01"
-            value={depositRate}
-            onChange={(e) => setDepositRate(Number(e.target.value))}
-          />
-          %
+          <p>Дата начала</p>
+          <div className={styles.dateBlock}>
+            <input
+              type='date'
+              value={startDate.toISOString().slice(0, 10)}
+              onChange={handleDateChange}
+            />
+          </div>
         </div>
 
         <div className={styles.field}>
-          Ставка фонда (годовая):{" "}
-          <input
-            type="number"
-            step="0.01"
-            value={fundRate}
-            onChange={(e) => setFundRate(Number(e.target.value))}
-          />
-          %
+          <p>Срок</p>
+          <div className={styles.inputBlock}>
+            <input
+              type='number'
+              value={months}
+              onChange={(e) => setMonths(Number(e.target.value))}
+            />
+            {' '}мес
+          </div>
         </div>
 
         <div className={styles.field}>
-          Срок:{" "}
-          <input
-            type="number"
-            value={months}
-            onChange={(e) => setMonths(Number(e.target.value))}
-          />
-          мес
+          <p>Ставка вклада (годовая)</p>
+          <div className={styles.inputBlock}>
+            <input
+              type='number'
+              step='0.01'
+              value={depositRate}
+              onChange={(e) => setDepositRate(Number(e.target.value))}
+            />
+            {' '}%
+          </div>
         </div>
 
         <div className={styles.field}>
-          Налоговый лимит в год:{" "}
-          <input
-            type="number"
-            value={taxFreeAmount}
-            onChange={(e) => settaxFreeAmount(Number(e.target.value))}
-          />
-          ₽
+          <p>Ставка фонда (годовая)</p>
+          <div className={styles.inputBlock}>
+            <input
+              type='number'
+              step='0.01'
+              value={fundRate}
+              onChange={(e) => setFundRate(Number(e.target.value))}
+            />
+            {' '}%
+          </div>
         </div>
 
         <div className={styles.field}>
-          Налог на прибыль:{" "}
-          <input
-            type="number"
-            step="0.01"
-            value={fundTaxRate}
-            onChange={(e) => setFundTaxRate(Number(e.target.value))}
-          />
-          %
+          <p>Безналоговый лимит вклада в год</p>
+          <div className={styles.inputBlock}>
+            <input
+              type='text'
+              value={taxFreeAmount.toLocaleString('ru-RU', { maximumFractionDigits: 0 })}
+              onChange={(e) => {
+                const cleanValue = e.target.value.replace(/\s/g, '');
+                setTaxFreeAmount(Number(cleanValue))
+              }
+              }
+            />
+            {' '}₽
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <p>Заработано на вкладе в этом году</p>
+          <div className={styles.inputBlock}>
+            <input
+              type='text'
+              value={earnedThisYear.toLocaleString('ru-RU', { maximumFractionDigits: 0 })}
+              onChange={(e) => {
+                const cleanValue = e.target.value.replace(/\s/g, '');
+                setEarnedThisYear(Number(cleanValue))
+              }}
+            />
+            {' '}₽
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <p>Налог на прибыль</p>
+          <div className={styles.inputBlock}>
+            <input
+              type='number'
+              step='0.01'
+              value={fundTaxRate}
+              onChange={(e) => setFundTaxRate(Number(e.target.value))}
+            />
+            {' '}%
+          </div>
         </div>
       </div>
 
-      <hr />
-
-      <p>
-        Итог вклада: <b>{depositProfit.toFixed(2)} ₽</b>
-      </p>
-      <p>
-        Итог фонда: <b>{fundProfit.toFixed(2)} ₽</b>
-      </p>
-      <p>
-        Разница:{" "}
-        <b>
-          {Math.abs((fundProfit - depositProfit)).toFixed(2)} ₽{" "}
-          {fundProfit > depositProfit ? "(фонд выгоднее)" : "(вклад выгоднее)"}
-        </b>
-      </p>
+      <div className={styles.results}>
+        <p>
+          Вклад: <b>{depositProfit.toLocaleString('ru-RU', {
+            maximumFractionDigits: 0
+          })} ₽</b>
+        </p>
+        <p>
+          Фонд: <b>{fundProfit.toLocaleString('ru-RU', {
+            maximumFractionDigits: 0
+          })} ₽</b>
+        </p>
+        <p>
+          Разница:{' '}
+          <b>
+            {Math.abs((fundProfit - depositProfit)).toLocaleString('ru-RU', {
+              maximumFractionDigits: 0
+            })} ₽{' '}
+            {fundProfit - depositProfit >= 0.5 ? '(фонд выгоднее)' : depositProfit - fundProfit >= 0.5 ? '(вклад выгоднее)' : '(одинаково)'}
+          </b>
+        </p>
+      </div>
     </div >
   );
 };

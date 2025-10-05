@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "dependencies": {
     "next": "15.5.4",
